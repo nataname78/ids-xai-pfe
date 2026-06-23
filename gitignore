@@ -1,0 +1,107 @@
+# ============================================
+#  Données : NE JAMAIS commit les datasets
+# ============================================
+data/raw/*
+data/processed/*
+data/external/*
+!data/raw/.gitkeep
+!data/processed/.gitkeep
+!data/external/.gitkeep
+*.csv
+*.parquet
+*.pkl
+*.h5
+*.hdf5
+
+# ============================================
+#  Modèles entraînés (souvent volumineux)
+# ============================================
+results/models/*
+!results/models/.gitkeep
+*.pt
+*.pth
+*.ckpt
+*.onnx
+*.joblib
+
+# ============================================
+#  MLflow / Tracking
+# ============================================
+mlruns/
+mlartifacts/
+wandb/
+
+# ============================================
+#  Python
+# ============================================
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# ============================================
+#  Environnements virtuels
+# ============================================
+.venv/
+venv/
+env/
+ENV/
+
+# ============================================
+#  Jupyter
+# ============================================
+.ipynb_checkpoints/
+*/.ipynb_checkpoints/*
+
+# ============================================
+#  IDE
+# ============================================
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# ============================================
+#  Secrets et configs locales
+# ============================================
+.env
+.env.local
+*.key
+secrets/
+
+# ============================================
+#  Logs et caches
+# ============================================
+*.log
+logs/
+.cache/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+
+# ============================================
+#  Rapport (PDF compilés, etc.)
+# ============================================
+report/*.pdf
+report/*.aux
+report/*.out
+report/*.toc
+report/*.log

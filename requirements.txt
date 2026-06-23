@@ -1,0 +1,58 @@
+# ============================================
+#  IDS-XAI : Dépendances Python
+#  Python 3.11+
+# ============================================
+
+# --- Manipulation de données ---
+numpy>=1.26
+pandas>=2.2
+scipy>=1.13
+
+# --- Machine Learning ---
+scikit-learn>=1.5
+xgboost>=2.1
+lightgbm>=4.5
+imbalanced-learn>=0.12   # SMOTE et variantes
+
+# --- Optimisation hyperparamètres ---
+optuna>=3.6
+
+# --- Deep Learning ---
+# Installer torch séparément selon ta version CUDA
+# Voir: https://pytorch.org/get-started/locally/
+torch>=2.3
+pytorch-tabular>=1.1
+einops>=0.8
+
+# --- Explainable AI ---
+shap>=0.46
+lime>=0.2.0.1
+captum>=0.7
+
+# --- Visualisation ---
+matplotlib>=3.9
+seaborn>=0.13
+plotly>=5.22
+
+# --- Dashboard ---
+streamlit>=1.36
+
+# --- Tracking expériences ---
+mlflow>=2.14
+
+# --- Notebook ---
+jupyterlab>=4.2
+ipykernel>=6.29
+ipywidgets>=8.1
+
+# --- Utilitaires ---
+pyyaml>=6.0
+python-dotenv>=1.0
+tqdm>=4.66
+joblib>=1.4
+rich>=13.7              # beaux prints en console
+
+# --- Qualité de code (optionnel mais recommandé) ---
+black>=24.4
+ruff>=0.5
+pytest>=8.2
