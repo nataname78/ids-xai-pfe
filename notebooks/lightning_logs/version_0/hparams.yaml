@@ -1,0 +1,194 @@
+target:
+- Label
+continuous_cols:
+- Destination_Port
+- Flow_Duration
+- Total_Fwd_Packets
+- Total_Backward_Packets
+- Total_Length_of_Fwd_Packets
+- Total_Length_of_Bwd_Packets
+- Fwd_Packet_Length_Max
+- Fwd_Packet_Length_Min
+- Fwd_Packet_Length_Mean
+- Fwd_Packet_Length_Std
+- Bwd_Packet_Length_Max
+- Bwd_Packet_Length_Min
+- Bwd_Packet_Length_Mean
+- Bwd_Packet_Length_Std
+- Flow_Bytes_s
+- Flow_Packets_s
+- Flow_IAT_Mean
+- Flow_IAT_Std
+- Flow_IAT_Max
+- Flow_IAT_Min
+- Fwd_IAT_Total
+- Fwd_IAT_Mean
+- Fwd_IAT_Std
+- Fwd_IAT_Max
+- Fwd_IAT_Min
+- Bwd_IAT_Total
+- Bwd_IAT_Mean
+- Bwd_IAT_Std
+- Bwd_IAT_Max
+- Bwd_IAT_Min
+- Fwd_PSH_Flags
+- Bwd_PSH_Flags
+- Fwd_URG_Flags
+- Bwd_URG_Flags
+- Fwd_Header_Length
+- Bwd_Header_Length
+- Fwd_Packets_s
+- Bwd_Packets_s
+- Min_Packet_Length
+- Max_Packet_Length
+- Packet_Length_Mean
+- Packet_Length_Std
+- Packet_Length_Variance
+- FIN_Flag_Count
+- SYN_Flag_Count
+- RST_Flag_Count
+- PSH_Flag_Count
+- ACK_Flag_Count
+- URG_Flag_Count
+- CWE_Flag_Count
+- ECE_Flag_Count
+- Down_Up_Ratio
+- Average_Packet_Size
+- Avg_Fwd_Segment_Size
+- Avg_Bwd_Segment_Size
+- Fwd_Avg_Bytes_Bulk
+- Fwd_Avg_Packets_Bulk
+- Fwd_Avg_Bulk_Rate
+- Bwd_Avg_Bytes_Bulk
+- Bwd_Avg_Packets_Bulk
+- Bwd_Avg_Bulk_Rate
+- Subflow_Fwd_Packets
+- Subflow_Fwd_Bytes
+- Subflow_Bwd_Packets
+- Subflow_Bwd_Bytes
+- Init_Win_bytes_forward
+- Init_Win_bytes_backward
+- act_data_pkt_fwd
+- min_seg_size_forward
+- Active_Mean
+- Active_Std
+- Active_Max
+- Active_Min
+- Idle_Mean
+- Idle_Std
+- Idle_Max
+- Idle_Min
+categorical_cols: []
+date_columns: []
+encode_date_columns: true
+validation_split: 0.2
+continuous_feature_transform: null
+normalize_continuous_features: true
+quantile_noise: 0
+num_workers: 0
+pin_memory: true
+handle_unknown_categories: true
+handle_missing_values: true
+pickle_protocol: 2
+dataloader_kwargs: {}
+task: classification
+head: LinearHead
+head_config:
+  layers: ''
+embedding_dims: []
+embedding_dropout: 0.0
+batch_norm_continuous_input: true
+learning_rate: 0.0001
+loss: CrossEntropyLoss
+metrics:
+- f1_score
+- accuracy
+metrics_prob_input:
+- false
+- false
+metrics_params:
+- task: multiclass
+  num_classes: 7
+  average: macro
+  sub_params_list:
+  - task: multiclass
+    num_classes: 7
+    top_k: 1
+- task: multiclass
+  num_classes: 7
+  sub_params_list:
+  - task: multiclass
+    num_classes: 7
+    top_k: 1
+target_range: null
+virtual_batch_size: null
+seed: 42
+_module_src: models.ft_transformer
+_model_name: FTTransformerModel
+_backbone_name: FTTransformerBackbone
+_config_name: FTTransformerConfig
+input_embed_dim: 32
+embedding_initialization: kaiming_uniform
+embedding_bias: true
+share_embedding: false
+share_embedding_strategy: fraction
+shared_embedding_fraction: 0.25
+attn_feature_importance: true
+num_heads: 8
+num_attn_blocks: 3
+transformer_head_dim: null
+attn_dropout: 0.1
+add_norm_dropout: 0.1
+ff_dropout: 0.1
+ff_hidden_multiplier: 4
+transformer_activation: GEGLU
+batch_size: 1024
+data_aware_init_batch_size: 2000
+fast_dev_run: false
+max_epochs: 30
+min_epochs: 1
+max_time: null
+accelerator: gpu
+devices: -1
+devices_list: null
+accumulate_grad_batches: 1
+auto_lr_find: false
+auto_select_gpus: true
+check_val_every_n_epoch: 1
+gradient_clip_val: 0.0
+overfit_batches: 0.0
+deterministic: false
+profiler: null
+early_stopping: valid_f1_score
+early_stopping_min_delta: 0.001
+early_stopping_mode: max
+early_stopping_patience: 5
+early_stopping_kwargs: {}
+checkpoints: valid_f1_score
+checkpoints_path: saved_models
+checkpoints_every_n_epochs: 1
+checkpoints_name: null
+checkpoints_mode: max
+checkpoints_save_top_k: 1
+checkpoints_kwargs: {}
+load_best: true
+track_grad_norm: -1
+progress_bar: simple
+precision: '32'
+trainer_kwargs: {}
+optimizer: Adam
+optimizer_params: {}
+lr_scheduler: ReduceLROnPlateau
+lr_scheduler_params:
+  mode: max
+  factor: 0.5
+  patience: 2
+lr_scheduler_monitor_metric: valid_f1_score
+lr_scheduler_interval: epoch
+categorical_dim: 0
+continuous_dim: 77
+output_dim: 7
+output_cardinality:
+- 7
+categorical_cardinality: []
+embedded_cat_dim: 0
