@@ -105,3 +105,48 @@ report/*.aux
 report/*.out
 report/*.toc
 report/*.log
+
+# --- Extension et analyse de fuite (valeur future logiciel) ---
+notebooks/12_*.ipynb
+notebooks/13_*.ipynb
+notebooks/*leakage*.ipynb
+notebooks/*fuite*.ipynb
+
+# --- Résultats lourds re-calculables ---
+results/xai/*.npz
+results/xai/*.pkl
+
+# --- Logs d'entraînement internes ---
+notebooks/lightning_logs/
+notebooks/.pt_tmp/
+
+# --- Modèles entraînés (produit) ---
+results/models/*.joblib
+results/models/*.pt
+results/models/*.ckpt
+results/models/**/*.sav
+results/models/**/*.ckpt
+
+# --- Dashboard (produit) ---
+dashboard/
+
+# --- Code source extrait / fichiers temporaires ---
+*_code.txt
+02_preprocessing_code.txt
+11_unsw_code.txt
+
+# --- Extension adverse et fuite (valeur future) ---
+notebooks/02b_*.ipynb
+notebooks/06_adversarial*.ipynb
+results/figures/evasion_*.png
+results/figures/leakage_*.png
+results/figures/shap_top_no_dport.png
+
+# --- Fichiers hors PFE ---
+report/codex_yggdrasil*.md
+
+# --- Rapports (remis séparément sur la plateforme aivancity) ---
+report/rapport_pfe_*.docx
+report/rapport_pfe_*.pdf
+report/rapport_PFE_*.docx
+report/rapport_PFE_*.pdf
