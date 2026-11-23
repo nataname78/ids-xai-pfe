@@ -1,105 +1,67 @@
-# IDS-XAI : Système de Détection d'Intrusion Explicable
+# IDS-XAI — Détection d'intrusion réseau explicable
 
-> Projet de Fin d'Études — PGE5 — aivancity School for Technology, Business & Society
+> Projet de fin d'études (PGE5, M2 IA & Data Science) — aivancity School for Technology, Business & Society.
 > Auteur : Nathan Makila
 
-## Contexte
+**Question de recherche :** un modèle qui détecte très bien les attaques réseau est-il aussi un modèle auquel un analyste SOC peut faire confiance ? Et peut-on mesurer la fiabilité des explications, pas seulement celle des prédictions ?
 
-Ce projet vise à développer un système de détection d'intrusion réseau (IDS) basé sur l'intelligence artificielle, avec un accent particulier sur **l'explicabilité (XAI)** des décisions de détection. L'objectif est de produire un système non seulement performant, mais aussi compréhensible par les analystes SOC (Security Operations Center).
+## Résultats en un coup d'œil
 
-## Problématique
+| Modèle (CIC-IDS2017, 7 classes, 377 682 flux de test) | Accuracy | F1 macro |
+|---|---|---|
+| Random Forest | 0,996 | 0,900 |
+| **XGBoost + Optuna** | **0,999** | **0,969** |
+| DNN (PyTorch) | 0,962 | 0,725 |
+| FT-Transformer | 0,995 | 0,793 |
 
-Les systèmes IDS modernes basés sur le machine learning souffrent de deux limites majeures en production :
+Le modèle tabulaire classique bat les deux réseaux de neurones : sur ces données, le deep learning n'apporte rien de plus.
 
-1. **Boîte noire** : un analyste cyber ne fait pas confiance à une alerte sans justification claire.
-2. **Faux positifs** : des taux trop élevés génèrent une fatigue d'alerte et noient les vraies menaces.
+## Ce qui a été vérifié
 
-Ce projet adresse ces deux limites en combinant des modèles performants (XGBoost, FT-Transformer) avec des méthodes XAI (SHAP, LIME) et une évaluation rigoureuse de la qualité des explications.
+**1. Fuite de données (test de `Destination Port`).** Cette variable était la plus importante selon SHAP, et chaque attaque de CIC-IDS2017 cible des ports précis. Je l'ai retirée et réentraîné à l'identique : le F1 macro passe de 0,972 à 0,961 (−1,1 point). La fuite via ce port existe mais ne suffit pas à expliquer la performance. Reste à tester : un découpage temporel plutôt qu'aléatoire (voir `notebooks/12_fuite_sans_dport.ipynb`).
 
-## Contributions visées
+**2. Généralisation (UNSW-NB15).** Le même pipeline tombe à 0,767 d'accuracy et 0,565 de F1 macro sur un autre jeu de données. Trois configurations testées (par défaut, hyperparamètres transférés, Optuna réoptimisé) donnent toutes un F1 macro compris entre 0,558 et 0,565 : le réglage ne résout pas l'écart, il vient des données.
 
-- Comparaison rigoureuse d'un modèle ML (XGBoost) et d'un modèle DL moderne (FT-Transformer/TabNet) sur CIC-IDS2017
-- Application et comparaison de SHAP et LIME pour expliquer les détections
-- Évaluation de la **fiabilité** des explications (stabilité, fidélité, plausibilité)
-- Validation croisée sur UNSW-NB15 (généralisation)
-- Dashboard démo pour visualisation des alertes expliquées
+**3. Qualité des explications (SHAP vs LIME).**
 
-## Stack technique
+| Critère | SHAP | LIME |
+|---|---|---|
+| Stabilité (Jaccard) | 1,00 | 0,56 |
+| Fidélité (AOPC) | 0,119 | 0,115 |
+| Plausibilité (% de features liées à la cybersécurité) | 93,2 % | 88,1 % |
 
-| Catégorie | Outils |
-|-----------|--------|
-| Langage | Python 3.11+ |
-| Manipulation données | NumPy, Pandas, scikit-learn |
-| Modèle ML | XGBoost + Optuna (HPO) |
-| Modèle DL | PyTorch + pytorch-tabular |
-| XAI | SHAP, LIME, Captum |
-| Visualisation | Matplotlib, Seaborn, Plotly |
-| Tracking | MLflow |
-| Démo | Streamlit |
-| Versioning | Git + GitHub |
+Sur les cas locaux étudiés, les deux méthodes ne retiennent que ~27 % des mêmes variables, mais s'accordent sur le sens de l'effet dans ~92 % des cas. Conclusion pratique : on ne peut pas substituer l'une à l'autre sans le dire.
 
-## Structure du projet
+## Limites connues
+
+- Découpage aléatoire (stratifié) et non temporel : les scores de CIC-IDS2017 sont probablement optimistes.
+- La classe `Bot` reste la plus difficile (F1 ≈ 0,81 pour XGBoost, 292 exemples de test).
+- Les explications ne sont pas évaluées avec de vrais analystes SOC.
+
+## Structure
 
 ```
-ids-xai-pfe/
-├── data/
-│   ├── raw/              # Datasets bruts (gitignored)
-│   ├── processed/        # Datasets prétraités
-│   └── external/         # Données externes éventuelles
-├── notebooks/            # Notebooks d'exploration et d'expériences
-├── src/
-│   ├── data/             # Chargement, preprocessing
-│   ├── models/           # Définitions des modèles
-│   ├── training/         # Boucles d'entraînement
-│   ├── evaluation/       # Métriques et comparaisons
-│   ├── xai/              # Méthodes XAI et évaluation
-│   └── utils/            # Helpers
-├── experiments/configs/  # Configs YAML reproductibles
-├── results/              # Figures, métriques, modèles sauvegardés
-├── dashboard/            # Application Streamlit
-├── report/               # Rapport final
-├── tests/                # Tests unitaires
-└── scripts/              # Scripts shell utilitaires
+notebooks/   exploration, modèles, XAI, tests de fuite et de validation croisée
+src/         données, modèles, entraînement, évaluation, XAI
+results/     métriques, figures, valeurs SHAP
+dashboard/   démo Streamlit
 ```
 
-## Datasets utilisés
-
-- **CIC-IDS2017** (principal) — Canadian Institute for Cybersecurity
-  https://www.unb.ca/cic/datasets/ids-2017.html
-- **UNSW-NB15** (validation croisée)
-  https://research.unsw.edu.au/projects/unsw-nb15-dataset
-
-## Setup
+## Reproduire
 
 ```bash
-# Cloner le repo
 git clone https://github.com/nataname78/ids-xai-pfe.git
 cd ids-xai-pfe
-
-# Créer un environnement virtuel
-python -m venv .venv
-.venv\Scripts\activate        # Windows
-# source .venv/bin/activate   # Linux/Mac
-
-# Installer les dépendances
+python -m venv .venv && source .venv/bin/activate   # Windows : .venv\Scripts\activate
 pip install -r requirements.txt
-
-# Vérifier l'installation
-python -c "import torch; print('CUDA disponible:', torch.cuda.is_available())"
 ```
 
-## Roadmap
+Les jeux de données ne sont pas inclus : [CIC-IDS2017](https://www.unb.ca/cic/datasets/ids-2017.html) et [UNSW-NB15](https://research.unsw.edu.au/projects/unsw-nb15-dataset).
 
-- [ ] **Phase A — Fondations** (S1–S3) : setup, EDA, preprocessing
-- [ ] **Phase B — Modèles ML** (S4–S6) : Random Forest, XGBoost, tuning
-- [ ] **Phase C — Modèles DL** (S7–S9) : DNN, FT-Transformer
-- [ ] **Phase D — XAI** (S10–S13) : SHAP, LIME, évaluation explications
-- [ ] **Phase E — Livraison** (S14) : rapport final, soutenance
+## Stack
 
-## Statut actuel
-
-🟢 Projet en phase de démarrage — semaine 1
+Python · scikit-learn · XGBoost · Optuna · PyTorch · SHAP · LIME · MLflow · Streamlit
 
 ## Licence
 
-Projet académique — usage pédagogique uniquement.
+Projet académique — usage pédagogique.
