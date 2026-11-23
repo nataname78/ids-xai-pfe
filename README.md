@@ -16,6 +16,8 @@
 
 Le modèle tabulaire classique bat les deux réseaux de neurones : sur ces données, le deep learning n'apporte rien de plus.
 
+![F1 par classe pour les quatre modèles, jeu de test CIC-IDS2017](results/figures/07_four_models_comparison.png)
+
 ## Ce qui a été vérifié
 
 **1. Fuite de données (test de `Destination Port`).** Cette variable était la plus importante selon SHAP, et chaque attaque de CIC-IDS2017 cible des ports précis. Je l'ai retirée et réentraîné à l'identique : le F1 macro passe de 0,972 à 0,961 (−1,1 point ; le notebook de ce test n'est pas publié). La fuite via ce port existe mais ne suffit pas à expliquer la performance. Reste à tester : un découpage temporel plutôt qu'aléatoire.
@@ -31,6 +33,8 @@ Le modèle tabulaire classique bat les deux réseaux de neurones : sur ces donn�
 | Plausibilité (% de features liées à la cybersécurité) | 93,2 % | 88,1 % |
 
 Sur les cas locaux étudiés, les deux méthodes ne retiennent que ~27 % des mêmes variables, mais s'accordent sur le sens de l'effet dans ~92 % des cas. Conclusion pratique : on ne peut pas substituer l'une à l'autre sans le dire.
+
+![SHAP vs LIME sur la stabilité, la fidélité et la plausibilité](results/figures/10_xai_radar_comparison.png)
 
 ## Limites connues
 
@@ -55,6 +59,8 @@ pip install -r requirements.txt
 ```
 
 Les jeux de données ne sont pas inclus : [CIC-IDS2017](https://www.unb.ca/cic/datasets/ids-2017.html) et [UNSW-NB15](https://research.unsw.edu.au/projects/unsw-nb15-dataset).
+
+Une fois téléchargés, les placer dans `data/raw/cic-ids-2017/` (fichiers CSV) et `data/raw/unsw-nb15/` (`UNSW_NB15_training-set.csv` et `UNSW_NB15_testing-set.csv`). Les notebooks sont numérotés dans l'ordre d'exécution : le 02 écrit `data/processed/`, le 04 sauvegarde le modèle XGBoost réutilisé ensuite. Les modèles entraînés ne sont pas publiés.
 
 ## Stack
 
