@@ -18,7 +18,7 @@ Le modèle tabulaire classique bat les deux réseaux de neurones : sur ces donn�
 
 ## Ce qui a été vérifié
 
-**1. Fuite de données (test de `Destination Port`).** Cette variable était la plus importante selon SHAP, et chaque attaque de CIC-IDS2017 cible des ports précis. Je l'ai retirée et réentraîné à l'identique : le F1 macro passe de 0,972 à 0,961 (−1,1 point). La fuite via ce port existe mais ne suffit pas à expliquer la performance. Reste à tester : un découpage temporel plutôt qu'aléatoire (voir `notebooks/12_fuite_sans_dport.ipynb`).
+**1. Fuite de données (test de `Destination Port`).** Cette variable était la plus importante selon SHAP, et chaque attaque de CIC-IDS2017 cible des ports précis. Je l'ai retirée et réentraîné à l'identique : le F1 macro passe de 0,972 à 0,961 (−1,1 point ; le notebook de ce test n'est pas publié). La fuite via ce port existe mais ne suffit pas à expliquer la performance. Reste à tester : un découpage temporel plutôt qu'aléatoire.
 
 **2. Généralisation (UNSW-NB15).** Le même pipeline tombe à 0,767 d'accuracy et 0,565 de F1 macro sur un autre jeu de données. Trois configurations testées (par défaut, hyperparamètres transférés, Optuna réoptimisé) donnent toutes un F1 macro compris entre 0,558 et 0,565 : le réglage ne résout pas l'écart, il vient des données.
 
@@ -41,10 +41,8 @@ Sur les cas locaux étudiés, les deux méthodes ne retiennent que ~27 % des mê
 ## Structure
 
 ```
-notebooks/   exploration, modèles, XAI, tests de fuite et de validation croisée
-src/         données, modèles, entraînement, évaluation, XAI
-results/     métriques, figures, valeurs SHAP
-dashboard/   démo Streamlit
+notebooks/   exploration, modèles, XAI et validation croisée (01 à 11)
+results/     métriques et figures
 ```
 
 ## Reproduire
