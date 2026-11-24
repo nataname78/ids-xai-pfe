@@ -68,4 +68,4 @@ Python · scikit-learn · XGBoost · Optuna · PyTorch · SHAP · LIME · MLflow
 
 ## Licence
 
-Projet académique — usage pédagogique.
+MIT. Voir le fichier [LICENSE](LICENSE).
