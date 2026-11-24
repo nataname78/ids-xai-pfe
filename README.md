@@ -20,7 +20,7 @@ Le modèle tabulaire classique bat les deux réseaux de neurones : sur ces donn�
 
 ## Ce qui a été vérifié
 
-**1. Fuite de données (test de `Destination Port`).** Cette variable était la plus importante selon SHAP, et chaque attaque de CIC-IDS2017 cible des ports précis. Je l'ai retirée et réentraîné à l'identique : le F1 macro passe de 0,972 à 0,961 (−1,1 point ; le notebook de ce test n'est pas publié). La fuite via ce port existe mais ne suffit pas à expliquer la performance. Reste à tester : un découpage temporel plutôt qu'aléatoire.
+**1. Fuite de données (test de `Destination Port`).** Cette variable était la plus importante selon SHAP, et chaque attaque de CIC-IDS2017 cible des ports précis. Je l'ai retirée et réentraîné à l'identique : le F1 macro passe de 0,972 à 0,961 (−1,1 point ; le notebook de ce test n'est pas publié ; 0,972 est le score de référence de ce test, alors que le tableau ci-dessus donne 0,969 pour le modèle final). La fuite via ce port existe mais ne suffit pas à expliquer la performance. Reste à tester : un découpage temporel plutôt qu'aléatoire.
 
 **2. Généralisation (UNSW-NB15).** Le même pipeline tombe à 0,767 d'accuracy et 0,565 de F1 macro sur un autre jeu de données. Trois configurations testées (par défaut, hyperparamètres transférés, Optuna réoptimisé) donnent toutes un F1 macro compris entre 0,558 et 0,565 : le réglage ne résout pas l'écart, il vient des données.
 
